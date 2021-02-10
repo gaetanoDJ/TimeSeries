@@ -9,19 +9,90 @@ library(tidyverse)
 library(zoo)
 library(tseries)
 library(forecast)
-
+library(stats)
+library(MARSS)
+library(datasets)
+library(TTR)
 ```
 
-## R Markdown
+## Question 1: Model selection 5.5 points
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+### Plot the series and comment on how it evolves over time.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r, echo=FALSE}
+personalincome <- ts(data = personal_income_series$y, frequency = 4)
+plot.ts(personalincome, ylab = "Personal Income", xlab="Time")
 ```
 
+As we can see from the above graph, the personal income seems to increase over time suggesting that there might be some sort of trend that is happening. To verify this, I decide to decompose the data to see if there is indeed any trend or seasonailty factor that is at play on the data. 
+
+```{r}
+personalincomedecomposed <- decompose(personalincome)
+plot(personalincomedecomposed)
+```
+
+According to the above graph, our time series data is affected by an upward trend which I believe will only require one difference to make the time series stationary. To verify my assumption I use the ndiff command that estimates the number of differences required to make a given time series stationary depending on the test that I select. In this case I use the "adf" to specify that I want to test against the Augmented Dickey-Fuller test. 
+
+
+```{r}
+forecast::ndiffs(personalincome, test = "adf")
+DF <- adf.test(personalincome, k = 0)
+ADF2 <- adf.test(personalincome, k = 2)
+ADF <- adf.test(personalincome)
+DF
+ADF2
+ADF
+
+```
+In the above block of code, I perform both an Dickey-Fuller (k=0) test, as for k = 0 the standard Dickey-Fuller test is computed, and the Augmented Dickey-Fuller test, at both k=2 and at k = $trunc((length(x)-1)^(1/3))$ the suggested upper bound on the number of lags that should be used. In each case, we get a p-value that is greater than 5%, meaning that we reject the null hypothesis that there is no unit root. 
+
+As I have hinted previously, the way that I would continue to work with the series is by taking the difference of the series as many times as required to ensure that the time series becomes stationary. As shown above, if we were to use the ADF testing method, I would only need to take one difference of the time series in order to make it stationary. To verify this claim, I run another series of DF and ADF tests, with the same k-values to see if we fail to reject the null hypothesis that there is no unit root.
+
+
+```{r}
+diff1dat <- diff(personalincome)
+DF <- adf.test(diff1dat, k = 0)
+ADF2 <- adf.test(diff1dat, k = 2)
+ADF <- adf.test(diff1dat)
+DF
+ADF2
+ADF
+```
+We have verified that the p-value indicates that we fail to reject the null hypothesis that there is not a unit root in our transformed series. 
+
+In the graphs below, I plotting both the ACF and PACF on the original and transformed series. 
+
+```{r}
+acforiginal <- acf(personalincome)
+paforiginal <- pacf(personalincome)
+```
+According to the ACF and PACF plots, when it come to the original series, it seems that the model that would best fit this series is an AR(1) model as the PACF seems to die off rather quickly (although not at the first lag). On the other hand, when I plot the ACF and PACF of the the transformed series, the model that I would choose is perhaps an MA(2) model because the ACF seems to die off after the second lag (although the PACF is statistically insignificant and the ACF dies off before the first lag as well).
+
+```{r}
+acftransformed <- acf(diff1dat)
+paftransformed <- pacf(diff1dat)
+```
+
+In the following block of code, and its output, I am computing the AIC for various models using the auto.arima function which gives us the best ARIMA model according to either AIC, AICc or BIC values. In this part, I have specified the model to show us the various models with their corresponding AIC and giving us the model with the lowest AIC.
+
+```{r}
+ARMAAIC <-forecast::auto.arima(diff1dat, ic = c("aic"), trace = TRUE)
+```
+
+As we can see from the lines of code, the model with the lowest AIC is the MA(2) mode. However, when we use the function specifying the BIC values we get that the AR(1) model would be better, this is to be expected because the BIC tends to prefer models with less lags.
+
+```{r}
+ARMABIC <-forecast::auto.arima(diff1dat, ic = c("bic"), trace = TRUE)
+```
+
+Consequently, I decided to test the MA(2) and the AR(1) for residuals autocorrelation. 
+
+```{r}
+forecast::checkresiduals(ARMAAIC)
+forecast::checkresiduals(ARMABIC)
+```
+
+In the case of checking the residuals, since we have p-values greater than 0.05, we can say that we reject the null hypothesis that the autocorrelation in the series is zero.   
 ## Including Plots
 
 You can also embed plots, for example:
