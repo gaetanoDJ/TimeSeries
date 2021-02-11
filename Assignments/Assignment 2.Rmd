@@ -97,3 +97,32 @@ ArchTest(diff1dat, lags = 7)
 ```
 
 In the case of checking the residuals, since we have p-values greater than 0.05, we can say that we reject the null hypothesis that the autocorrelation in the series is zero.   
+
+
+
+## Question 2: 
+
+### Part a) 
+Look at Lecture 4
+
+To test for heteroscedasticity in the error variance, we can perform the following steps:
+
+1. Calculate OLS residuals et from the OLS model
+
+2. Fit an AR(p) model to the error term et. Obtain the residuals nt from the AR fitting.
+
+3. From the series n²t compute its sample ACF and PACF . Pattern of ACF and PACF indicates ARCH or GARCH model
+
+5. Once the model is identified, the next step is to estimate parameters of ARCH or GARCH model. We can use maximum likelihood estimation method.
+
+6. We can forecast the error variance with the fitted model.
+
+## Part b)
+
+TS 5 for OLS.
+
+The "no autocorrelation" assumption is not necessary for Consistencyof OLS estimators in generalBUT, if there is lagged dependent variable in our model then:yt=
+
+### Part c)
+
+if autocorrelation is not removed, then standard errors need to becorrected OLS standard errors overstate statistical significance because there isless independent variation Compute serial correlation-robust standard errors after OLS:Newey-West correction for autocorrelation
