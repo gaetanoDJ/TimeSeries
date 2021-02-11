@@ -92,6 +92,10 @@ forecast::checkresiduals(ARMAAIC)
 forecast::checkresiduals(ARMABIC)
 ```
 
+<<<<<<< HEAD
 In the case of checking the residuals, since we have p-values greater than 0.05, we can say that we cannot reject the null hypothesis that the autocorrelation in the series is zero.   
 
 
+=======
+In the case of checking the residuals, since we have p-values greater than 0.05, we can say that we reject the null hypothesis that the autocorrelation in the series is zero.   
+>>>>>>> parent of 74cbbca (Update Assignment 2.Rmd)
