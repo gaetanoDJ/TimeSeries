@@ -13,6 +13,7 @@ library(stats)
 library(MARSS)
 library(datasets)
 library(TTR)
+library(FinTS)
 ```
 
 ## Question 1: Model selection 5.5 points
@@ -52,7 +53,7 @@ As I have hinted previously, the way that I would continue to work with the seri
 ```{r}
 diff1dat <- diff(personalincome)
 DF <- adf.test(diff1dat, k = 0)
-ADF2 <- adf.test(diff1dat, k = 2)
+ADF2 <- adf.test(diff1dat, k  = 2)
 ADF <- adf.test(diff1dat)
 DF
 ADF2
@@ -90,15 +91,9 @@ Consequently, I decided to test the MA(2) and the AR(1) for residuals autocorrel
 ```{r}
 forecast::checkresiduals(ARMAAIC)
 forecast::checkresiduals(ARMABIC)
+
+ArchTest(diff1dat,lags = 6)
+ArchTest(diff1dat, lags = 7)
 ```
 
 In the case of checking the residuals, since we have p-values greater than 0.05, we can say that we reject the null hypothesis that the autocorrelation in the series is zero.   
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
