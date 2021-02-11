@@ -92,12 +92,9 @@ forecast::checkresiduals(ARMAAIC)
 forecast::checkresiduals(ARMABIC)
 ```
 
-<<<<<<< HEAD
-In the case of checking the residuals, since we have p-values greater than 0.05, we can say that we cannot reject the null hypothesis that the autocorrelation in the series is zero.   
 
 
-=======
-In the case of checking the residuals, since we have p-values greater than 0.05, we can say that we reject the null hypothesis that the autocorrelation in the series is zero.   
+In the case of checking the residuals, since we have p-values greater than 0.05, we can say that we reject the null hypothesis 
 
 
 
@@ -127,3 +124,5 @@ The "no autocorrelation" assumption is not necessary for Consistencyof OLS estim
 ### Part c)
 
 if autocorrelation is not removed, then standard errors need to becorrected OLS standard errors overstate statistical significance because there isless independent variation Compute serial correlation-robust standard errors after OLS:Newey-West correction for autocorrelation
+
+
