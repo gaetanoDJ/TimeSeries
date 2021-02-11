@@ -92,13 +92,6 @@ forecast::checkresiduals(ARMAAIC)
 forecast::checkresiduals(ARMABIC)
 ```
 
-In the case of checking the residuals, since we have p-values greater than 0.05, we can say that we reject the null hypothesis that the autocorrelation in the series is zero.   
-## Including Plots
+In the case of checking the residuals, since we have p-values greater than 0.05, we can say that we cannot reject the null hypothesis that the autocorrelation in the series is zero.   
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
