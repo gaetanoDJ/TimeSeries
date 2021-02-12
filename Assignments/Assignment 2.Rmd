@@ -14,6 +14,10 @@ library(MARSS)
 library(datasets)
 library(TTR)
 library(FinTS)
+library(readxl)
+library(aTSA)
+personal_income_series <- read_excel("G:/Github/TimeSeries/Data/personal_income series.xls")
+View(personal_income_series)
 ```
 
 ## Question 1: Model selection 5.5 points
@@ -37,29 +41,28 @@ According to the above graph, our time series data is affected by an upward tren
 
 ```{r}
 forecast::ndiffs(personalincome, test = "adf")
-DF <- adf.test(personalincome, k = 0)
-ADF2 <- adf.test(personalincome, k = 2)
-ADF <- adf.test(personalincome)
+DF <- tseries::adf.test(personalincome, k = 0)
+ADF2 <- tseries::adf.test(personalincome, k = 2)
+ADF <- tseries::adf.test(personalincome)
 DF
 ADF2
 ADF
-
 ```
-In the above block of code, I perform both an Dickey-Fuller (k=0) test, as for k = 0 the standard Dickey-Fuller test is computed, and the Augmented Dickey-Fuller test, at both k=2 and at k = $trunc((length(x)-1)^(1/3))$ the suggested upper bound on the number of lags that should be used. In each case, we get a p-value that is greater than 5%, meaning that we reject the null hypothesis that there is no unit root. 
+In the above block of code, I perform both an Dickey-Fuller (k=0) test, as for k = 0 the standard Dickey-Fuller test is computed, and the Augmented Dickey-Fuller test, at both k=2 and at k = $trunc((length(x)-1)^(1/3))$ the suggested upper bound on the number of lags that should be used. In each case, we get a p-value that is greater than 5%, meaning that we fail to reject the null hypothesis that there is a unit root. 
 
-As I have hinted previously, the way that I would continue to work with the series is by taking the difference of the series as many times as required to ensure that the time series becomes stationary. As shown above, if we were to use the ADF testing method, I would only need to take one difference of the time series in order to make it stationary. To verify this claim, I run another series of DF and ADF tests, with the same k-values to see if we fail to reject the null hypothesis that there is no unit root.
+As I have hinted previously, the way that I would continue to work with the series is by taking the difference of the series as many times as required to ensure that the time series becomes stationary. As shown above, if we were to use the ADF testing method, I would only need to take one difference of the time series in order to make it stationary. To verify this claim, I run another series of DF and ADF tests, with the same k-values to see if we reject the null hypothesis that there is a unit root.
 
 
 ```{r}
 diff1dat <- diff(personalincome)
-DF <- adf.test(diff1dat, k = 0)
-ADF2 <- adf.test(diff1dat, k = 2)
-ADF <- adf.test(diff1dat)
+DF <- tseries::adf.test(diff1dat, k = 0)
+ADF2 <- tseries::adf.test(diff1dat, k = 2)
+ADF <- tseries::adf.test(diff1dat)
 DF
 ADF2
 ADF
 ```
-We have verified that the p-value indicates that we fail to reject the null hypothesis that there is not a unit root in our transformed series. 
+We have verified that the p-value indicates that we reject the null hypothesis that there is a unit root in our transformed series. 
 
 In the graphs below, I plotting both the ACF and PACF on the original and transformed series. 
 
@@ -92,41 +95,42 @@ Consequently, I decided to test the MA(2) and the AR(1) for residuals autocorrel
 forecast::checkresiduals(ARMAAIC)
 forecast::checkresiduals(ARMABIC)
 
-ArchTest(diff1dat,lags = 6)
-ArchTest(diff1dat, lags = 7)
 ```
 
+In the case of checking the residuals, since we have p-values greater than 0.05, we can say that we fail to reject the null hypothesis that the autocorrelation in the series is zero.   
 
 
-In the case of checking the residuals, since we have p-values greater than 0.05, we can say that we cannot reject the null hypothesis that the autocorrelation in the series is zero.   
+```{r}
+ArchTest(diff1dat, lags = 1, demean = FALSE)
+arch.test(arima(diff1dat,order=c(1,0,0)),output=TRUE)
+arch.test(arima(diff1dat,order=c(0,0,2)),output=TRUE)
+```
 
+In the above code, I run two separate ARCH test, one testing on the difference data that we have shown to not contain a unit root, and then running another ARCH test on the 2 models that I have chose in order to reinforce my first finding. From the p-values, we can conclude that we reject the null hypothesis that there is no heteroscedsaticity and that we have an ARCH model of order 1, when looking at the Lagrange-Multiplier test.  
 
+Given all this statiscal evidence, my two favorite models that I would choose for the transformed series are the MA(2) and the AR(1) models with the addition of the ARCH(1). As shown multiple times, the MA(2) and the AR(1) models have shown to be the best fit for the data. The economic reason for me choosing the these two models is due to the nature of the our observed data, personal income. The autoregressive models uses observations from the past in order to predict the value in the next period, and since we are dealing with personal income, it is conceivable that the individual will see an increase in his income because of his career choices/promotions or due to shocks that take longer to recover, such as a trade war. On the other hand, the MA model is valid because the individual's income could be dependent on some economic shocks that only last for a relatively "short time" such as a reform of the tax code. 
 
 ## Question 2: 
 
 ### Part a) 
 Look at Lecture 4
 
-To test for heteroscedasticity in the error variance, we can perform the following steps:
+Heteroscedasticity is when the variance of errors are changing over time, usually when they become higher and higher the further we move to the right on the x axis. It might be important for the specific series that we are using because, when the variance of errors is changing, it would be harder to fit a model due to increase variation from the trend relationship. For this, I refer to the hand drawn graph.  
 
-1. Calculate OLS residuals et from the OLS model
+Before testing for heteroscedasticity we should first test for serial correlation. After the serial correlation has been corrected for, then we test for heteroscedasticity. We do two tests depending on the type of heteroscedasticity that we suspect. If there is autocorrelation or not. If there is then we add lags until it disappears, if not we continue on to the regular tests.
 
-2. Fit an AR(p) model to the error term et. Obtain the residuals nt from the AR fitting.
+To test for ARCH/AGRCH we may use the Breusch-Pagan Test for Heteroskedasticity or the Lagrange Multiplier test. Once it has been shown that  heteroscedasticity is present then we look that the ACF and the PACF to tell us which Model to use. Once we have determined the model, we can then use the maximum likelihood estimation method to estimate parameters of ARCH or GARCH model. Generally we can assume first that we need to model an ARCH model and then we test ARCH with numerous long lags to see if they are significant. If the long term lags are significant, then we can suspect a GARCH model of variance. 
 
-3. From the series n²t compute its sample ACF and PACF . Pattern of ACF and PACF indicates ARCH or GARCH model
 
-5. Once the model is identified, the next step is to estimate parameters of ARCH or GARCH model. We can use maximum likelihood estimation method.
 
-6. We can forecast the error variance with the fitted model.
+### Part b)
 
-## Part b)
+Autocorrelation occurs when the errors are serially correlated. The assumtion that is violated when it comes to autocorrelation is the TS 5 assumption of no serial correlation, however for the finite sample, TS.5 is not needed for having unbiased OLS estimator but the OLS estimators will not be BLUE. The "no autocorrelation" assumption is not necessary for Consistency of OLS estimators in general with the exception of when we are dealing with lagged dependent variables in our model(s). The reason is that contemporaneous exogeneity would not hold making the OLS yield inconsistent estimates. 
 
-TS 5 for OLS.
-
-The "no autocorrelation" assumption is not necessary for Consistencyof OLS estimators in generalBUT, if there is lagged dependent variable in our model then:yt=
+To overcome the issue, we could use the MLE, remove it or do inference with "corrected" tests. The reason is that the OLS standard errors overstate the statistical significance as there is less independent variation.  Therefore, we need to correct the standard errors after OLS using the Newey-West correction for autocorrelation.
 
 ### Part c)
 
-if autocorrelation is not removed, then standard errors need to becorrected OLS standard errors overstate statistical significance because there isless independent variation Compute serial correlation-robust standard errors after OLS:Newey-West correction for autocorrelation
+As can be seen by the page attached to his document, if we were to simply have an AR(1) model and we assume that there is a serial correlation in the error term. What ends up happening, through substitution, is the the OLS is giving us coefficients that are consistent with an AR(1) model even though the correct model for y is the AR(2) model. Consequently, this acts like an omission of an explanatory variable thus causing bias and inconsistency in the OLS estimates.  
 
-
+## Question 3:
