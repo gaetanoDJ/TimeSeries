@@ -1,0 +1,92 @@
+---
+title: "Assignment 4"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(FinTS)
+library(tseries)
+library(aTSA)
+library(urca)
+library(lmtest)
+library(egcm)
+library(haven)
+```
+
+## Question 1: Cointegration 
+
+The block of code situated below just shows how I imported the data into R and transformed both the r1 and r3 into time series data. However, given the fact that the data given is a stata file I am unsure if it was necessary for us to transform the data into a time series data to begin with. I tested for a unit root in the r1 and r3 series using the augmented Dickey Fuller test on both the untransformed, the original imported data, and the transformed data, that I transformed in the block of code underneath, to see if there was a difference in the results. The results were the same, leading me to conclude that the original data was already a time series data.   
+
+```{r, results='hide'}
+irates <- read_dta("G:/Github/TimeSeries/Data/irates.dta")
+attach(irates)
+ts(r1)
+ts(r3)
+```
+
+Testing for a unit root in r1 using several augmented Dickey Fuller tests.
+```{r}
+tseries::adf.test(r1,k=0) # Dickey Fuller Test: no unit root
+tseries::adf.test(r1,k=1) # Augmented DF Test with 1 lag: no unit root
+tseries::adf.test(r1,k=2) # Augmented DF Test with 2 lags: no unit root
+tseries::adf.test(r1,k=3) # Augmented DF Test with 3 lags: unit root
+tseries::adf.test(r1,k=4) # Augmented DF Test with 4 lags: unit root
+tseries::adf.test(r1)     # Augmented DF Test with upper bounds lags: unit root
+```
+
+When we run the augmented Dickey Fuller tests with 0,1 and 2 lags, we reject the null hypothesis that the time series data contains a unit root. However, when we we increase the number of lags to 3 or more, we fail to reject the null that the time series data has a unit root. Looking at the ACF of the time series, the graph below, I would say that the more lags that we have included are better, thus the r1 time series does indeed have a unit root.  
+
+
+```{r}
+acf(r1)
+```
+
+
+Testing for a unit root in r3 using several augmented Dickey Fuller tests.
+```{r}
+tseries::adf.test(r3,k=0) # Dickey Fuller Test: unit root
+tseries::adf.test(r3,k=1) # Augmented DF Test with 1 lag: no unit root
+tseries::adf.test(r3,k=2) # Augmented DF Test with 2 lags: unit root
+tseries::adf.test(r3,k=3) # Augmented DF Test with 3 lags: unit root
+tseries::adf.test(r3,k=4) # Augmented DF Test with 4 lags: unit root
+tseries::adf.test(r3)     # Augmented DF Test with upper bounds lags: unit root
+```
+
+What is interesting here is that when I run the simple Dickey Fuller test and the augmented DF test with 2 or more lags, I find that I consistently fail to reject the null hypothesis that there is a unit root present in the time series. Looking at the ACF of the time series, I do not see why that would be the case. Either way, we can conclude that the there is a unit root in the r3 time series data.     
+
+
+```{r}
+acf(r3)
+```
+
+Performing a regression by OLS explaining r1 from r3 and testing for co-integration.
+
+```{r}
+Reg1 <- lm(r1~r3)
+Reg1Resid <- Reg1$residuals
+tseries::adf.test(Reg1Resid,k=0) # no unit root
+tseries::adf.test(Reg1Resid,k=1) # no unit root
+tseries::adf.test(Reg1Resid,k=2) # no unit root
+tseries::adf.test(Reg1Resid,k=3) # no unit root
+tseries::adf.test(Reg1Resid)     # no unit root. Long Run Relationship between r3 and r1. 
+
+```
+
+
+Performing a regression by OLS explaining r1 from r3 and testing for co-integration.
+```{r}
+Reg2 <- lm(r3~r1)
+Reg2Resid <- Reg2$residuals
+tseries::adf.test(Reg2Resid,k=0) # no unit root
+tseries::adf.test(Reg2Resid,k=1) # no unit root
+tseries::adf.test(Reg2Resid,k=2) # no unit root
+tseries::adf.test(Reg2Resid,k=3) # no unit root
+tseries::adf.test(Reg2Resid)     # no unit root. Long Run Relationship between r3 and r1. 
+```
+
+## Question 2: 
+
+### I) Cholesky Decomposition
+
+  a. The vector of structural shocks  
