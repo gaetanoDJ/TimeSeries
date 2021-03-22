@@ -20,6 +20,7 @@ The block of code situated below just shows how I imported the data into R and t
 
 ```{r, results='hide'}
 irates <- read_dta("G:/Github/TimeSeries/Data/irates.dta")
+irates <- read_dta("C:/Users/gaeta/Documents/Github/TimeSeries/Data/irates.dta")
 attach(irates)
 ts(r1)
 ts(r3)
@@ -84,6 +85,10 @@ tseries::adf.test(Reg2Resid,k=2) # no unit root
 tseries::adf.test(Reg2Resid,k=3) # no unit root
 tseries::adf.test(Reg2Resid)     # no unit root. Long Run Relationship between r3 and r1. 
 ```
+
+Cointegration occurs when you have you have a stable relationship, meaning that there exists a linear relationship between the time series, between two or more time series data that individually display unit root behavior. To determine whether or not there is stable reationship between time series we need to do a series of tests. The first test is to verify that one or both of the time series data are non-staionary, meaning that they have unit root. Once we have confirmed that, then we run two regressions: one regression of a time series on another and vice versa. We then take the residuals, or error terms, of these linear regressions and test to see if they contain a unit root. If they do not contain a unit root, then we say that the equilibirum error is stationary, meaning no unit root, then that means that if r1 and r3 are cointegrated. It is important to note that we run the augmented DF test on the equilibium errors we must look at the Dickey-Fuller value and compare it to the Davidson and Mackinnon Cointegrated Regression Dickey Fuller tables of critical values. In all cases, we reject the null hypothesis that the equilibrium error contains a unit root.    
+
+In the context of this excercise, there is a stable long run relationship between the two interest rates meaning that if r1 increases then in the long run r3 increases at the same rate or vice versa (similar for a decrease). 
 
 ## Question 2: 
 
