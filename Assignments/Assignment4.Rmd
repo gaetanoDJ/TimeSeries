@@ -12,20 +12,22 @@ library(urca)
 library(lmtest)
 library(egcm)
 library(haven)
+library(tinytex)
 ```
 
 ## Question 1: Cointegration 
 
-The block of code situated below just shows how I imported the data into R and transformed both the r1 and r3 into time series data. However, given the fact that the data given is a stata file I am unsure if it was necessary for us to transform the data into a time series data to begin with. I tested for a unit root in the r1 and r3 series using the augmented Dickey Fuller test on both the untransformed, the original imported data, and the transformed data, that I transformed in the block of code underneath, to see if there was a difference in the results. The results were the same, leading me to conclude that the original data was already a time series data.   
+|   The block of code situated below just shows how I imported the data into R and transformed both the r1 and r3 into time series data. However, given the fact that the data given is a stata file I am unsure if it was necessary for us to transform the data into a time series data to begin with. I tested for a unit root in the r1 and r3 series using the augmented Dickey Fuller test on both the untransformed, the original imported data, and the transformed data, that I transformed in the block of code underneath, to see if there was a difference in the results. The results were the same, leading me to conclude that the original data was already a time series data.   
 
 ```{r, results='hide'}
-irates <- read_dta("G:/Github/TimeSeries/Data/irates.dta")
+
 irates <- read_dta("C:/Users/gaeta/Documents/Github/TimeSeries/Data/irates.dta")
 attach(irates)
 ts(r1)
 ts(r3)
 ```
 
+### A) 
 Testing for a unit root in r1 using several augmented Dickey Fuller tests.
 ```{r}
 tseries::adf.test(r1,k=0) # Dickey Fuller Test: no unit root
@@ -36,15 +38,15 @@ tseries::adf.test(r1,k=4) # Augmented DF Test with 4 lags: unit root
 tseries::adf.test(r1)     # Augmented DF Test with upper bounds lags: unit root
 ```
 
-When we run the augmented Dickey Fuller tests with 0,1 and 2 lags, we reject the null hypothesis that the time series data contains a unit root. However, when we we increase the number of lags to 3 or more, we fail to reject the null that the time series data has a unit root. Looking at the ACF of the time series, the graph below, I would say that the more lags that we have included are better, thus the r1 time series does indeed have a unit root.  
+|   When we run the augmented Dickey Fuller tests with 0,1 and 2 lags, we reject the null hypothesis that the time series data contains a unit root. However, when we we increase the number of lags to 3 or more, we fail to reject the null that the time series data has a unit root. Looking at the ACF of the time series, the graph below, I would say that the more lags that we have included are better, thus the r1 time series does indeed have a unit root.  
 
 
 ```{r}
 acf(r1)
 ```
 
-
-Testing for a unit root in r3 using several augmented Dickey Fuller tests.
+### B)
+|   Testing for a unit root in r3 using several augmented Dickey Fuller tests.
 ```{r}
 tseries::adf.test(r3,k=0) # Dickey Fuller Test: unit root
 tseries::adf.test(r3,k=1) # Augmented DF Test with 1 lag: no unit root
@@ -54,7 +56,7 @@ tseries::adf.test(r3,k=4) # Augmented DF Test with 4 lags: unit root
 tseries::adf.test(r3)     # Augmented DF Test with upper bounds lags: unit root
 ```
 
-What is interesting here is that when I run the simple Dickey Fuller test and the augmented DF test with 2 or more lags, I find that I consistently fail to reject the null hypothesis that there is a unit root present in the time series. Looking at the ACF of the time series, I do not see why that would be the case. Either way, we can conclude that the there is a unit root in the r3 time series data.     
+|   What is interesting here is that when I run the simple Dickey Fuller test and the augmented DF test with 2 or more lags, I find that I consistently fail to reject the null hypothesis that there is a unit root present in the time series. Looking at the ACF of the time series, I do not see why that would be the case. Either way, we can conclude that the there is a unit root in the r3 time series data.     
 
 
 ```{r}
@@ -71,11 +73,12 @@ tseries::adf.test(Reg1Resid,k=1) # no unit root
 tseries::adf.test(Reg1Resid,k=2) # no unit root
 tseries::adf.test(Reg1Resid,k=3) # no unit root
 tseries::adf.test(Reg1Resid)     # no unit root. Long Run Relationship between r3 and r1. 
-
 ```
 
 
-Performing a regression by OLS explaining r1 from r3 and testing for co-integration.
+### C)
+
+|   Performing a regression by OLS explaining r3 from r1 and testing for co-integration.
 ```{r}
 Reg2 <- lm(r3~r1)
 Reg2Resid <- Reg2$residuals
@@ -86,12 +89,86 @@ tseries::adf.test(Reg2Resid,k=3) # no unit root
 tseries::adf.test(Reg2Resid)     # no unit root. Long Run Relationship between r3 and r1. 
 ```
 
-Cointegration occurs when you have you have a stable relationship, meaning that there exists a linear relationship between the time series, between two or more time series data that individually display unit root behavior. To determine whether or not there is stable reationship between time series we need to do a series of tests. The first test is to verify that one or both of the time series data are non-staionary, meaning that they have unit root. Once we have confirmed that, then we run two regressions: one regression of a time series on another and vice versa. We then take the residuals, or error terms, of these linear regressions and test to see if they contain a unit root. If they do not contain a unit root, then we say that the equilibirum error is stationary, meaning no unit root, then that means that if r1 and r3 are cointegrated. It is important to note that we run the augmented DF test on the equilibium errors we must look at the Dickey-Fuller value and compare it to the Davidson and Mackinnon Cointegrated Regression Dickey Fuller tables of critical values. In all cases, we reject the null hypothesis that the equilibrium error contains a unit root.    
+### D)
+|   Cointegration when there is a stable relationship between two unit root time series. In this case we do want to regress the unit root time series on the other one because this regression would not be spurious. The reason why we would want to do this is because the estimate for $\beta$ with OLS is not only consistent, but it is "super consistent" meaing that it converges to the true $\beta$ much faster than usual asymptotic. In short, cointegrated series have stochastic trend in common.
+  
+|   In this case, we can see that the r1 and r3 time series data contain unit roots from the adf test. We think that there exists a linear relationship between the two since they are both interest rates. To test this theory, we run a regression of r1 on r3 and vice versa, we take the residuals, which represent the equilibrium error, to see if they reject the null hypothesis that the residuals contain a unit root. As we can see from the results, the residuals we consitently reject the null hypothesis that there is a unit root in the residuals. IF the residuals are stationary, i.e. do not contain a unit root, then if r1 or r3 deviate from the equilibrium then it would eventually get back to it.   
 
-In the context of this excercise, there is a stable long run relationship between the two interest rates meaning that if r1 increases then in the long run r3 increases at the same rate or vice versa (similar for a decrease). 
+|   However, it is important to note that when we do the augmented DF tests on the residuals we look at the DF value, not necessarily the p-value, and compare it to the Davidson and Mackinnon Cointegrated Regression Dickey Fuller critical value table. The reason is that the OLS chooses small variance in the residuals leading us to reject the null hypothesis more often than not. In either case, no matter the number of lags, we get a DF statistic less than -3.90, meaning that we reject the null hypothesis. 
+
+|   What do you mean interpret results intuitively. 
+  
+|   In this context, the interest rate spread moves over time but will eventually settle at its mean. 
+
 
 ## Question 2: 
 
 ### I) Cholesky Decomposition
 
-  a. The vector of structural shocks  
+  A. The vector of structural shocks is: 
+  $$\begin{bmatrix}
+  \epsilon^{\Delta prod}_{t}\\
+  \epsilon^{rea}_{t}\\
+  \epsilon^{rpo}_{t}\\
+  \end{bmatrix}$$
+  
+  or written out as 
+  $$\begin{bmatrix}
+  Supply Shock\\
+  Global Demand Shock\\
+  Speculation Shock\\
+  \end{bmatrix}$$
+  The assumptions that we usually make for these shocks are that the oil production does not respond immediately to world demand and oil prices because of costly production adjustments. The Global demand for oil is affected within the month by oil production, but not oil demand shocks because the real economic activity repsonse after an oil price increase is rather sluggish. Lastly, the innovations to oil prices, that are not explained by oil supply or global demand, are called oil demand shocks and oil prices respond immediately to oil production and world demand. 
+  
+|   The covariance - variance matrix is written as 
+$$\begin{bmatrix}
+  \sigma_1^2 & 0 & 0\\
+  0 & \sigma_2^2 & 0\\
+  0 & 0 & \sigma_3^2\\
+  \end{bmatrix}$$
+  
+  B. The reduced form model is written as:
+  \begin{align}
+  z_t=A_0^{-1}\alpha+\sum^{24}_{i=1}A_0^{-1}A_iz_{t-i}+A_0^{-1}\epsilon_t
+  \end{align}
+  The reduced form shocks is written as:
+  \begin{align}
+  A_0^{-1}\epsilon_t &= e_t \\
+  &= \begin{bmatrix}
+   e^{\Delta prod}_{t}\\
+  e^{rea}_{t}\\
+  e^{rpo}_{t}\\
+  \end{bmatrix} \\
+  &= \begin{bmatrix}
+  1 & 0 & 0\\
+  a_{21} & 1 & 0\\
+  a_{31} & a_{32} & 1\\
+  \end{bmatrix}
+  \begin{bmatrix}
+  \epsilon^{\Delta prod}_{t}\\
+  \epsilon^{rea}_{t}\\
+  \epsilon^{rpo}_{t}\\
+  \end{bmatrix}
+  \end{align}
+  
+  The assumptions that we are making is that $A_0$ and $A_0^{-1}$ are lower-triangular. THis means that we can identify the reduced form shock recursively once we know $a_{11}$ etc... The assumptions that we have made are the same as above. What we are assuming is that the shock on the real price does not affect contemporaneously the changes in oil production and neither does the shock to real economic activity. In the next equation, the shock on the real price of oil does not affect contemporaneously real economic activity. 
+  
+|   The variance-covariance matrix using those assumptions is. What do you mean by all the entries?
+$$\begin{bmatrix}
+  \omega_{11} & \omega_{12} & \omega_{13}\\
+  \omega_{21} & \omega_{22} & \omega_{23}\\
+  \omega_{31} & \omega_{32} & \omega_{33}\\
+  \end{bmatrix}$$
+  
+  It is important to note that the $\Omega$ matrix is the variance-covariance matrics for the forecast error. It is not diagonal as both forecast errors are affected by all the shocks. Since $\omega_{12}=\omega_{21}$, $\omega_{13}=\omega_{31}$ and $\omega_{23}=\omega_{32}$ it cannot be the case that all of these are equal to zero. If they were then we would a diagonal matrix.
+  
+  C. The Cholesky decomposition allows us to to find $A^-1$ and the covariance-variance matrix of the structural shocks that I will denote from now on as $D$ as the decomposition is unique. The Cholesky equation is:
+  \begin{align}
+  \Omega &=T \Delta T'
+  \end{align}
+ where $\Delta$ is a diagonal matrix containing positive elements and $T$ is a lower triangular matrix with 1s on the diagonal. 
+ Since we know that $A^{-1}_0$ is lower triangular we can say that $T=A^{-1}_0$ and that $D$ is a diagonal matrix with positive elements we can say that $\Delta = D$. So from the reduced form VAR and the Cholesky decomposition we can get the structural VAR assuming that $A^{-1}$ is indeed lower triangular. 
+
+|   It is important to order the variables carefully in order to identify the specific parameters of interest through Cholesky because you will not get the same results if you were to change the order. 
+  
+  
