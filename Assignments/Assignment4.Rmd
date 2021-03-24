@@ -204,12 +204,38 @@ Where $a=c=f=1$
   
  B. The reduced form VAR model is:
  \begin{align}
- z_t=A_0^{-1}\alpha+\sum^{24}_{i=1}A_0^{-1}A_iz_{t-i}+A^
+ z_t=A_0^{-1}\alpha+\sum^{24}_{i=1}A_0^{-1}A_iz_{t-i}+A^{-1}_0\epsilon_t
  \end{align}
  
+ THe reduced form shocks as we can see from above is $A^{-1}_0\epsilon_t$. Written out we get:
+ \begin{align}
+ e_t &= A^{-1}_0\epsilon_t \\
+ &= \begin{bmatrix}
+  a & 0 & 0 \\
+  b & c & 0 \\
+  d & e & f \\
+  \end{bmatrix}
+  \begin{bmatrix}
+  \epsilon_t^{\Delta prod}  \\
+  \epsilon_t^{rea}  \\
+  \epsilon_t^{ rpo} \\
+  \end{bmatrix}
+ \end{align}
+ 
+ Thus the the recursive errors formation is:
+ \begin{align}
+ e_t^{\Delta prod} &= a\epsilon_t^{\Delta prod} \\
+ e_t^{rea} &= b\epsilon_t^{\Delta prod} + c\epsilon_t^{rea} \\
+ e_t^{rpo} &= d\epsilon_t^{\Delta prod} + e\epsilon_t^{rea} + f\epsilon_t^{ rpo}
+ \end{align}
   
+  C.The effects that are contemporaneously zero as an effect of the short run restrictions are the graphs d,g,h (respectively, row-column, middle-left, bottom-left, bottom-middle). The reason I say this is because we need to look at the labels of the graph and compare them to the order of our equation. We know from our assumptions that the aggregate demand shock and the oil specific demand shock should not affect oil production within the month. Hence the graphs d and g represent this assumption. Furthermore, we know the the oil-specific demand shock does not affect the real activity contemporaneously. Graph h represents the effect of oil-specific demand on the real economic activity. 
   
+  D. Three main findings:
   
+  1) production disruptions cause small and transitory increase in real price, lasting for a year;
+  2) increases in aggregate demand for industrial commodities causes delayed but large and sustained increase in real price of oil;
+  3) increases in precautionary demand for crude oil causes immediate,persistent, and large increase in real pric
   
   
   
