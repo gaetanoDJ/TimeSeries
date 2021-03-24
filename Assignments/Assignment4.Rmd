@@ -160,7 +160,7 @@ Since we know that $\Omega$ is not a diagonal matrix, it cannot be the case that
   
  
   
-  C. IF we were to suppose that $B^{-1}$ was a "lower triangular" matrix, meanig that the upper right corner of matrix is full of zeroes, then we could identify $B$ and $D$ from the Cholesky decomposition. The Cholesky decomposition states that for any positive symmetric matrix, i.e. $\Omega$ there exists a unique decomposed triangular factorization such that:
+  C. If we were to suppose that $B^{-1}$ was a "lower triangular" matrix, meanig that the upper right corner of matrix is full of zeroes, then we could identify $B$ and $D$ from the Cholesky decomposition. The Cholesky decomposition states that for any positive symmetric matrix, i.e. $\Omega$ there exists a unique decomposed triangular factorization such that:
   \begin{align}
   \Omage= T\Delta T'
   \end{align}
@@ -186,10 +186,31 @@ Since we know that $\Omega$ is not a diagonal matrix, it cannot be the case that
  e_{1t} &= \epsilon_{1t} \\
  e_{2t} &= \epsilon_{2t} + \beta_{21}\epsilon_{1t}
 \end{align}
-  WE have solved our identification issue. ############
+  We have solved our identification issue. However, as we can see, it is very important that we think carefully about the order of our variables. As we can see here, we find that the forecast error for the second equation is based on the structural shock of the first equation, with some $\beta$ coefficient. Thus we identify the forecast errors recursively. If we were to change the order of the variables, we change the meaning of what we are trying to find. 
   
- Since we know that $A^{-1}_0$ is lower triangular we can say that $T=A^{-1}_0$ and that $D$ is a diagonal matrix with positive elements we can say that $\Delta = D$. So from the reduced form VAR and the Cholesky decomposition we can get the structural VAR assuming that $A^{-1}$ is indeed lower triangular. 
+  D. The matrix $A_0$ looks like this after imposing the necessary short run restrictions:
+  $$
+  \begin{bmatrix}
+  a & 0 & 0 \\
+  -b & c & 0 \\
+  -d & -e & f \\
+  \end{bmatrix}
+  $$
+Where $a=c=f=1$ 
+  
+### II) Short Run Restrictions
 
-|   It is important to order the variables carefully in order to identify the specific parameters of interest through Cholesky because you will not get the same results if you were to change the order. 
+  A. The intuition of the restrictions imposed in the case of the Killian VAR example is that oil production does not respond within the month to world demand and oil prices, thus it is the first equation in the VAR. World demand on the other hand is affected by oil production within the month, but not by oil demand shocks, so it would be the second equation in the VAR. Lastly, the real oil price is explained by oil production and world demand immediately thus it will be the last equation in this VAR. This intuition makes sense. Oil production cannot change immediately there is some sort of costly production adjustment. World demand on the other hand is contemporaneously affected within the month by oil production as companies can cut back on their oil usage. However, oil demand shocks do not affect it because there is sluggish real economic activity response after the oil price increase. The real price of oil is directly impacted by both these factors immediately.       
+  
+ B. The reduced form VAR model is:
+ \begin{align}
+ z_t=A_0^{-1}\alpha+\sum^{24}_{i=1}A_0^{-1}A_iz_{t-i}+A^
+ \end{align}
+ 
+  
+  
+  
+  
+  
   
   
