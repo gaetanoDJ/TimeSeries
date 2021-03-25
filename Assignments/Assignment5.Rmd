@@ -1,0 +1,107 @@
+---
+title: "Assignment5"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tinytex)
+```
+
+## R Markdown
+
+
+## Question 2: General VAR
+
+  A. We often use VARs in macro time series estimation instead of IVs and single-equation estimations methods because of endogeniety issues. The VARs is a good a way to work with these endogeniety issues. To illustrate this, let's look at the following example. Let:
+  \begin{align}
+  y_{1t} = \frac{M}{P} &= \text{real money balance} \\
+  y_{2t} &= \text{Real GNP}
+  \end{align}
+  
+  The money demand function is:
+  \begin{align}
+  y_{1t} &= \gamma_{10} + \beta_{12}y_{2t}+\gamma_{11}y_{1,t-1}+\gamma_{12}y_{2,t-1} + \epsilon_{1t}
+  \end{align}
+
+In this function, $\epsilon_{1t}$ encompossases all other factors, $\beta_{12}$ is the elasticity of real money balances with respect to real income and the lagged terms allow for a different long-run elasticity. As we can see in the function, money demand,$y_{1t}$, is a function of the money supply, $y_{2t}$. Similarly, the function of money supply is dependent on the money demand:
+ \begin{align}
+  y_{2t} &= \gamma_{20} + \beta_{21}y_{1t}+\gamma_{21}y_{1,t-1}+\gamma_{22}y_{2,t-1} + \epsilon_{2t}
+  \end{align}
+What we are interested in these equations are the $\beta_{12}$ and $\beta_{21}$ coefficients but the problem is there is an inverse realtionship between the two equations. $y_{2t}$ is affected by $y_{1t}$ and vice versa. This leads us to have inconsistent $\beta$ coefficients if we were to estimate them via OLS as they are endegenous. Since there is a correlation between income and money, as evident from the equations, we are unable to infer any causality. This is where the VAR comes in. 
+
+| If we estimate both equations together, $\epsilon_{1t}$ and $\epsilon_{2t}$ may include omitted variables. In a fully specified strucutral model $\epsilon_{1t}$ and $\epsilon_{2t}$ represnt exogenous shocks, in this case money demand shock and productivity shock respectively. What this means is that if $\epsilon_{1t}$ is indeed an exogenous shock, a change in it will affect $y_{1t}$ and also $y_{2t}$ via $\beta_{21}$. This means that we can theoreticaly identify $\beta_{21}$ but there is the identification problem due to exogeneity. To run them together, we simply the VAR. 
+
+  B. Using the example above, the structural VAR is:
+  \begin{align}
+  \begin{bmatrix} 1 & -\beta_{12} \\-\beta_{22} & 1  \end{bmatrix}
+  \begin{bmatrix} y_{1t} \\ y_{2t}   \end{bmatrix} &=
+  \begin{bmatrix} \gamma_{10} \\ \gamma_{20}   \end{bmatrix} +
+  \begin{bmatrix} \gamma_{11} & \gamma_{12} \\\gamma_{21} & \gamma_{22}  \end{bmatrix}
+  \begin{bmatrix} y_{1,t-1} \\ y_{2,t-1}   \end{bmatrix} +
+  \begin{bmatrix} \epsilon_{1t} \\ \epsilon_{2t}   \end{bmatrix}
+  \end{align}
+  
+  In matrix notation:
+  \begin{align}
+  B_{2x2}y_{t_{2x1}}= \Gamma_{0_{2x1}}+\Gamma_{1_{2x2}}y_{t-1_{2x1}} + \epsilon_{t_{2x1}}
+  \end{align}
+  
+  C. The reduced form VAR is written as:
+  \begin{align}
+  y_{t}&= B^{-1}\Gamma_{0}+B^{-1}\Gamma_{1}y_{t-1} + B^{-1}\epsilon_{t}\\
+  &= C +\Phiy_{t-1}+e_t
+  \end{align}
+  The reason as to why we need to define and estimate the reduced form version is so that we can get the structural parameters, the parameters that we want. In the structural VAR model, we are unable to run any of the equations because we do not know the $B$ matrix as it is a matrix of the coefficients that we want since we do not know what they are!
+  
+  D. What we want to identify is the $B^{-1}$ by looking at the error term and the structural errors. We know that there is linear relationship between the forecast error $e_t$ and $\epsilon_t$, so if we were to solve the identification problem then we can estimate our coefficients. However, if we have no additional restrictions we end up with the following.
+  \begin{align}
+  \begin{bmatrix} e_{1t} \\ e_{2t}  \end{bmatrix} &= \frac{1}{1-\beta_{12}\beta_{21}}
+  \begin{bmatrix} \epsilon_{1t}+\beta_{12}\epsilon_{2t} \\ \beta_{21}\epsilon_{1t}+\epsilon_{2t}  \end{bmatrix}
+  \end{align}
+  Now we need to define variance-covariance of the forecast errors:
+  \begin{align}
+  E[e_t]&= 0, \text{as the structural errors mean is 0 }  \\
+  E[e_te_t']&= E[B^{-1}\epsilon_{t}\epsilon_{t}'(B^{-1})'] \\
+  &= B^{-1}E[\epsilon_{t}\epsilon_{t}'](B^{-1})'\\
+  &= B^{-1}D(B^{-1})' =\Omega
+  \Omega &= \begin{bmatrix} \omega_{11} & \omega_{12} \\ \omega_{21} & \omega_{22}  \end{bmatrix}
+  \end{align}
+  Note that $\omega_{12}=\omega_{21}$ as $\Omega$ is a non-diagonal variance-Covariance matrix as the forecast errors are affected by shocks. The $D$ matrix is the variance-covariance matrix with positive elements and is a diagonal, as we assume that the shocks are independent of each other. However, if we look a the structural VAR, equation(1), there are 10 parameters, compared to the reduced form VAR(1), equation (2), there are only 9 parameters. From that, we are unable to identify $\beta_{12}$,$\beta_21$ from $\omega_{12}$ as we only have the correlation of income with the the forecast and money with the forecast. Consequently, we need additional restrictions to identify the model, i.e short-run, long-run or sign restrictions. 
+  
+  E. The way that I would the short-run restrictions is by setting one of the structural shocks to zero. By doing so the number of parameters from the structural VAR and the reduced form VAR will be the same, allowing us to solve the identification problem. The Cholesky states that for any positive definite symmetric matrix, there exists a uniquely decomposed triangular factorization
+  \begin{align}
+  \Omega=T\Delta T'
+  \end{align}
+  where $\Delta$ is a diagonal positive elements and $T$ is a lower triangular matrix with 1s on the diagonal. Remember that we made these assumptions:
+   \begin{align}
+  \Omega &= \begin{bmatrix} \omega_{11} & \omega_{12} \\ \omega_{21} & \omega_{22}  \end{bmatrix} \\
+  D &= \begin{bmatrix} \sigma_{1}^2 & 0 \\ 0 & \sigma_{2}^2  \end{bmatrix} \\ 
+  \Omega &= B^{-1}D(B^{-1})'
+  \end{align}
+  So if we were to say that $B^{-1}$ is lower tringular then we could say that:
+  \begin{align}
+  T&= B^{-1} \\
+  \Delta &= D \\
+  \Omega &= B^{-1}D(B^{-1})'
+  \end{align}
+  This would imply that the reduced form VAR and Cholesky gives us the structural VAR if $B^{-1}$ is lower triangular. But what does it mean for $B^{-1}$ to be lower triangular? Well it means that $\beta_{12}$ must be equal to $0$, so as to have the variables on the right side of the diagonal of the matrix equal to 0. 
+  
+  F. Now remember:
+  \begin{align}
+  \begin{bmatrix} e_{1t} \\ e_{2t}  \end{bmatrix} &= \frac{1}{1-\beta_{12}\beta_{21}}
+  \begin{bmatrix} \epsilon_{1t}+\beta_{12}\epsilon_{2t} \\ \beta_{21}\epsilon_{1t}+\epsilon_{2t}  \end{bmatrix}
+  \end{align}
+What happens if $\beta_{12}=0$?
+\begin{align}
+  \begin{bmatrix} e_{1t} \\ e_{2t}  \end{bmatrix} &= \frac{1}{1-\beta_{12}\beta_{21}}
+  \begin{bmatrix} \epsilon_{1t}+\beta_{12}\epsilon_{2t} \\ \beta_{21}\epsilon_{1t}+\epsilon_{2t}  \end{bmatrix}
+  &= \begin{bmatrix} \epsilon_{1t}+\beta_{12}\epsilon_{2t} \\ \beta_{21}\epsilon_{1t}+\epsilon_{2t}  \end{bmatrix}
+  &= \begin{bmatrix} \epsilon_{1t} \\ \beta_{21}\epsilon_{1t}+\epsilon_{2t}  \end{bmatrix}
+  \end{align}
+  We can now identify $\epsilon s$ from the forecast errors recursively!
+  e_{1t} &= \epsilon_{1t} \\
+  e_{2t} &= \epsilon_{2t} +  \beta_{21}\epsilon_{1t}
+  \end{align}
+  
+  H. Once we solved for the identification issue, we can use the structural paramters to find the response of the endogenous variables to shocks. 
