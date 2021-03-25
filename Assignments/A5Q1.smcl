@@ -1,0 +1,25 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\gaeta\Documents\GitHub\TimeSeries\Assignments\A5Q1.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}25 Mar 2021, 09:33:51
+
+{com}. clear
+
+. import excel "C:\Users\gaeta\Documents\GitHub\TimeSeries\Data\fredgraph.xls", sheet("FRED Graph") firstrow
+{res}{text}(5 vars, 164 obs)
+
+{com}. tsset index
+{res}{txt}{col 9}time variable:  {res}{col 25}index, 1.00 to 110.00
+{txt}{col 17}delta:  {res}1 unit
+
+{com}. tsline ln_Y
+{res}
+{com}. 
+. tsline CPI
+{res}
+{com}. 
+. tsline ffr
+{res}
+{com}. 
