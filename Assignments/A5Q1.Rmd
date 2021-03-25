@@ -1,0 +1,181 @@
+---
+title: "A5Q1"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tinytex)
+```
+
+## Question 1: VAR example
+
+  A. Please look at the log.
+  B. The VAR model that I want to estimate is:
+  \begin{align}
+  \begin{bmatrix}
+  1 & 0 & 0 \\
+  \beta_{21} & 1 &0 \\
+  \beta_{31} & \beta_{32} & 1 
+  \end{bmatrix}
+   \begin{bmatrix}
+  P_{1t} \\
+  Y_{2t} \\
+  FFR_{3t} 
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+  \gamma_{11} & \gamma_{12} & \gamma_{13}  \\
+  \gamma_{21} & \gamma_{22} & \gamma_{23} \\
+  \gamma_{31} & \gamma_{23} & \gamma_{33}  
+  \end{bmatrix}
+  \begin{bmatrix}
+  P_{1,t-1} \\
+  Y_{2,t-1} \\
+  FFR_{3,t-1} 
+  \end{bmatrix} + 
+  \begin{bmatrix}
+  \epsilon_{1t} \\
+  \epsilon_{2t} \\
+  \epsilon_{1t} 
+  \end{bmatrix}
+  \end{align}
+  
+  As we can see, I put the change in the Federal Funds Rate (FFR) as the thrid equation as we saw in class. The reason is that by putting the FFR last we can say that the change in inflation growth rate and output affect monetary policy because of policy rules are act the same way as Taylor-type rules However, there is a lot of ambiguity as to the order of the change in inflation and the change in output. In this case, I decided to say that the CPI affects output. My reasoning is that when there are low periods of inflation there is a tendency for output growth to be lower and vice versa. Therefore, output growth is affected contemporaneously by the CPI. However, the reverse is true as well, but as we see later on the ordering of these two variables do not really matter.
+  
+  C.What I assume about the contemporaneous effects of the variables is that the change in the CPI is not affected contemporaneously by changes in the output nor by changes in hte FFR. Similarly, the change in output is affected by changes in the inflation but not in changes of the FFR. My short run restrictions are represented by the outer left matrix that is lower triangular. 
+  
+  D. Please look at the Appendix.
+  
+  E. THe part of the resuslts that are due to the assumptions that I have made are graphs d, g and h (going left to right i.e a,b,c next line d,e,f etc...) that the contemporaneous effect is zero. 
+  
+  F. A shock of the inflation growth rate has a relatively significant effect on the infaltion growth rate but seems to die out after 5 steps. There is a negative significant effect of the shock on GDP output that is persistent, but there is no significant affect on the FFR. 
+  A shock to the change in output leads to an increase in infaltion that is persistent, whereas the effect on the change of output dies out. The shock also sees an increase in the FFR but it also dies out. 
+  Interestingly enough, a shock in the FFR is insignificant on output growth but there does seem to be a small effect on the inflation growth that is persistent. The effect of a shock in the FFR on the FFR dies out.
+  
+  G. Look at the appendix. The short run restrictions that we are imposing is that the change in output is not contemporaneously affected by changes in the CPI nor by changes in the FFR, whereas now the CPI is contemporaneously affected by changes in the output growth and not by the changes in the FFR. The graphs between this ordering and the ordering above are nearly identical. The only changes that we see are in graphs b and d, where the "intercept" at step 0 changes its position, which is relfecting the new short run restrictions that we have made. 
+  
+  H. The results are essentially identical meaning that our main conclusions remain. 
+  
+## Question 2
+
+G. The IRF returns the dynamic response of a shock on all variables in the VAR system. Recall that our reduced form VAR is given by:
+\begin{align}
+  y_t &= C + \Phi y_{t-1} + e_t
+\end{align}  
+
+In addition, the effect of $e_t$ on $y_{t+s}$ we call $\psi_s$ the effect $B^{-1}\epsilon_t$ on $y_t+s$. SO the effect of $\epsilon_t$ on $y_{t+s}$ is $\theta_s=\psi_sB^{-1}$. 
+
+So the vector MA in terms of structural shock can be written as:
+\begin{align}
+y_t &= \mu + e_t + \Psi_1 e_{t-1} +\Psi_2 e_{t-2} + ..., \text{the reduced form} \\
+&= \mu + B^{-1}\epsilon_t + \Psi_1B^{-1}\epsilon_{t-1}+\Psi_2B^{-1}\epsilon_{t-2} + ... \\
+&= \mu + \Theta_0epsilon_{t} + \Theta_1epsilon_{t-1}+\Theta_2epsilon_{t-2} + ...
+\end{align}
+So, if we know $\Psi$ and the matrix $B$ we can determine $\Theta$.
+So that gives us the structural IRF. WE know that
+\begin{align}
+\Theta_s &= \Psi_s B^{-1} \\
+\begin{bmatrix}
+\Theta_{11,s} & \Theta_{12,s} \\
+\Theta_{21,s} & \Theta_{22,s}\\
+\end{bmatrix}
+ &= 
+\begin{bmatrix}
+\psi_{11,s} & \psi{12,s} \\
+\psi{21,s} & \psi{22,s}\\
+\end{bmatrix}
+\frac{1}{1-\beta_{12}\beta_{21}}
+\begin{bmatrix}
+1 & \beta_{12} \\
+\beta_{21} & 1\\
+\end{bmatrix}
+\end{align}
+
+Therefore, 
+\begin{align}
+\theta_{21,s} = \frac{1}{1-\beta_{12}\beta_{21}}(\psi{21,s}+\beta_{21}\psi{22,s})
+\end{align}
+
+H.To calculate the effect of the structural shock in equation 1 on the left hand side variable of equation 1, 3 periods ahead we do the following.
+\begin{align}
+\begin{bmatrix}
+y_{1t} \\
+y_{2t} \\
+\end{bmatrix}
+&= 
+\begin{bmatrix}
+\mu_1 \\
+\mu_2 \\
+\end{bmatrix}
++
+\begin{bmatrix}
+\Theta_{11,0} & \Theta_{12,0} \\
+\Theta_{21,0} & \Theta_{22,0}\\
+\end{bmatrix}
+\begin{bmatrix}
+\epsilon_{1t} \\
+\epsilon_{2t} \\
+\end{bmatrix}
++
+\begin{bmatrix}
+\Theta_{11,1} & \Theta_{12,1} \\
+\Theta_{21,1} & \Theta_{22,1}\\
+\end{bmatrix}
+\begin{bmatrix}
+\epsilon_{1,t-1} \\
+\epsilon_{2,t-1} \\
+\end{bmatrix}
++
+\begin{bmatrix}
+\Theta_{11,2} & \Theta_{12,2} \\
+\Theta_{21,2} & \Theta_{22,2}\\
+\end{bmatrix}
+\begin{bmatrix}
+\epsilon_{1,t-2} \\
+\epsilon_{2,t-2} \\
+\end{bmatrix}
++
+\begin{bmatrix}
+\Theta_{11,3} & \Theta_{12,3} \\
+\Theta_{21,3} & \Theta_{22,3}\\
+\end{bmatrix}
+\begin{bmatrix}
+\epsilon_{1,t-3} \\
+\epsilon_{2,t-3} \\
+\end{bmatrix}
+\end{align}
+
+We want to calculate $\frac{\delta y_{1,t+3}}{\delta \epsilon_{1,t}}$. We use the stationarity of the time series to say $\frac{\delta y_{1,t}}{\delta \epsilon_{1,t-3}}$ respectively. So, we want to find $\theta_{11,3}$. WE know that $\Theta_3$ is equal to:
+\begin{align}
+\begin{bmatrix}
+\Theta_{11,3} & \Theta_{12,3} \\
+\Theta_{21,3} & \Theta_{22,3}\\
+\end{bmatrix} 
+&= \Psi_3B^{-1} \\
+&= \begin{bmatrix}
+\psi_{11,3} & \psi{12,3} \\
+\psi{21,3} & \psi{22,3}\\
+\end{bmatrix}
+\frac{1}{1-\beta_{12}\beta_{21}}
+\begin{bmatrix}
+1 & \beta_{12} \\
+\beta_{21} & 1\\
+\end{bmatrix}
+\end{align}
+
+So, 
+\begin{align}
+\theta_{11,3} &= \frac{1}{1-\beta_{12}\beta_{21}}(\psi_{11,3}+\beta_{12}\psi_{12,3})
+\end{align}
+
+Similarly, the effect of the structural shock in equation 2 on the left hand side variable of equation 1 3 periods ahead is $theta_{12,3}$. From above,
+
+\begin{align}
+\theta_{12,3} &= \frac{1}{1-\beta_{12}\beta_{21}}(\psi_{12,3}+\beta_{21}\psi_{11,3})
+\end{align}
+
+Since we assume that $B^{-1}$ is lower triangular, meaning that $\beta_{12}=0$, we have that $\Theta_{11,3} = \psi_{11,3}$ and $\theta_{12,3} = \psi_{12,3}+\beta_{21}\psi_{11,3}$
+
+
+

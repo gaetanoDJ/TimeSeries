@@ -1,0 +1,130 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\gaeta\Documents\GitHub\TimeSeries\Assignments\A5Q1.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}25 Mar 2021, 09:33:51
+
+{com}. clear
+
+. import excel "C:\Users\gaeta\Documents\GitHub\TimeSeries\Data\fredgraph.xls", sheet("FRED Graph") firstrow
+{res}{text}(5 vars, 164 obs)
+
+{com}. tsset index
+{res}{txt}{col 9}time variable:  {res}{col 25}index, 1.00 to 110.00
+{txt}{col 17}delta:  {res}1 unit
+
+{com}. tsline ln_Y
+{res}
+{com}. 
+. tsline CPI
+{res}
+{com}. 
+. tsline ffr
+{res}
+{com}. generate ln_P=log(CPI)
+{txt}(54 missing values generated)
+
+{com}. tsline ln_P
+{res}
+{com}. gen d_P =d.ln_P
+{txt}(55 missing values generated)
+
+{com}. tsline d_P
+{res}
+{com}. generate d_lnY=d.ln_Y
+{txt}(55 missing values generated)
+
+{com}. 
+. generate d_ffr=d.ffr
+{txt}(55 missing values generated)
+
+{com}. tsline d_lnY
+{res}
+{com}. tsline d_ffr
+{res}
+{com}. matrix A2 = (1,0,0 \ .,1,0 \ .,.,1)
+
+. matrix B2 = (.,0,0 \ 0,.,0 \ 0,0,.)
+
+. 
+. 
+. 
+. svar d_P d_lnY d_ffr, lags(1/8) aeq(A2) beq(B2)
+{res}{txt}Estimating short-run parameters
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-323.57062}  
+Iteration 1:{space 3}log likelihood = {res:  220.7974}  
+Iteration 2:{space 3}log likelihood = {res: 753.13016}  
+Iteration 3:{space 3}log likelihood = {res: 808.65463}  
+Iteration 4:{space 3}log likelihood = {res: 814.16505}  
+Iteration 5:{space 3}log likelihood = {res: 814.46979}  
+Iteration 6:{space 3}log likelihood = {res: 814.47033}  
+Iteration 7:{space 3}log likelihood = {res: 814.47033}  
+{res}
+{txt}Structural vector autoregression
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}[/A]1_1 = 1{p_end}
+{p 0 7}{space 1}{text:( 2)}{space 1} [/A]1_2 = 0{p_end}
+{p 0 7}{space 1}{text:( 3)}{space 1} [/A]1_3 = 0{p_end}
+{p 0 7}{space 1}{text:( 4)}{space 1} [/A]2_2 = 1{p_end}
+{p 0 7}{space 1}{text:( 5)}{space 1} [/A]2_3 = 0{p_end}
+{p 0 7}{space 1}{text:( 6)}{space 1} [/A]3_3 = 1{p_end}
+{p 0 7}{space 1}{text:( 7)}{space 1} [/B]1_2 = 0{p_end}
+{p 0 7}{space 1}{text:( 8)}{space 1} [/B]1_3 = 0{p_end}
+{p 0 7}{space 1}{text:( 9)}{space 1} [/B]2_1 = 0{p_end}
+{p 0 7}{space 1}{text:(10)}{space 1} [/B]2_3 = 0{p_end}
+{p 0 7}{space 1}{text:(11)}{space 1} [/B]3_1 = 0{p_end}
+{p 0 7}{space 1}{text:(12)}{space 1} [/B]3_2 = 0{p_end}
+
+{col 1}{txt}Sample:  {res}10.00 - 110.00 {txt}{col 49}Number of obs{col 67}= {res}       101
+{txt}Exactly identified model{col 49}Log likelihood{col 67}=  {res} 814.4703
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}/A           {txt}{c |}
+{space 9}1_1 {c |}{col 14}{res}{space 2}        1{col 26}{txt}  (constrained)
+{space 9}2_1 {c |}{col 14}{res}{space 2} .2219318{col 26}{space 2} .1515062{col 37}{space 1}    1.46{col 46}{space 3}0.143{col 54}{space 4} -.075015{col 67}{space 3} .5188786
+{txt}{space 9}3_1 {c |}{col 14}{res}{space 2}-20.04659{col 26}{space 2} 13.37523{col 37}{space 1}   -1.50{col 46}{space 3}0.134{col 54}{space 4}-46.26157{col 67}{space 3} 6.168384
+{txt}{space 9}1_2 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_2 {c |}{col 14}{res}{space 2}        1{col 26}{txt}  (constrained)
+{space 9}3_2 {c |}{col 14}{res}{space 2}-24.97205{col 26}{space 2} 8.692509{col 37}{space 1}   -2.87{col 46}{space 3}0.004{col 54}{space 4}-42.00905{col 67}{space 3}-7.935043
+{txt}{space 9}1_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_3 {c |}{col 14}{res}{space 2}        1{col 26}{txt}  (constrained)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}/B           {txt}{c |}
+{space 9}1_1 {c |}{col 14}{res}{space 2} .0028025{col 26}{space 2} .0001972{col 37}{space 1}   14.21{col 46}{space 3}0.000{col 54}{space 4}  .002416{col 67}{space 3} .0031889
+{txt}{space 9}2_1 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_1 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}1_2 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_2 {c |}{col 14}{res}{space 2} .0042671{col 26}{space 2} .0003002{col 37}{space 1}   14.21{col 46}{space 3}0.000{col 54}{space 4} .0036786{col 67}{space 3} .0048555
+{txt}{space 9}3_2 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}1_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_3 {c |}{col 14}{res}{space 2} .3727673{col 26}{space 2} .0262278{col 37}{space 1}   14.21{col 46}{space 3}0.000{col 54}{space 4} .3213617{col 67}{space 3} .4241729
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. irf create var2irf, step(24) set(var2,replace)
+{txt}(file var2.irf created)
+(file var2.irf now active)
+(file var2.irf updated)
+
+{com}. 
+. irf graph sirf, irf(var2irf) yline(0,lcolor(black))
+{res}
+{com}. irf graph oirf, irf(var2irf) yline(0,lcolor(black))
+{res}
+{com}. irf graph sirf, irf(var2irf) yline(0,lcolor(black))
+{res}
+{com}. irf graph oirf, irf(var2irf) yline(0,lcolor(black))
+{res}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\gaeta\Documents\GitHub\TimeSeries\Assignments\A5Q1.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}25 Mar 2021, 10:11:15
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
