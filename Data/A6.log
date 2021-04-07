@@ -1,0 +1,215 @@
+--------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  G:\Github\TimeSeries\Data\A6.log
+  log type:  text
+ opened on:   7 Apr 2021, 16:27:10
+
+. twoway line growth t
+
+. twoway line unrate t
+
+. keep if year >= 1950
+(0 observations deleted)
+
+. keep if year <= 1987
+(0 observations deleted)
+
+. quietly regress unrate t
+
+. predict unrate_adj, resid
+variable unrate_adj already defined
+r(110);
+
+. generate bp1 = (year<1974)
+variable bp1 already defined
+r(110);
+
+. generate bp2 = (year>=1974)
+variable bp2 already defined
+r(110);
+
+. quietly regress growth bp1 bp2, noconstant
+
+. predict growth_adj, resid
+variable growth_adj already defined
+r(110);
+
+. twoway line growth_adj t
+
+. twoway line unrate_adj t
+
+. matrix A2 = (1,0,0 \ .,1,0 \ .,.,1)
+
+. 
+. matrix B2 = (.,0,0 \ 0,.,0 \ 0,0,.)
+
+. svar growth_adj unrate_adj, lags(1/8) aeq(A2) beq(B2)
+aeq() matrix does not have the correct row dimension
+r(198);
+
+. matrix A2 = (1,0 \ .,1),replace
+replace not found
+r(111);
+
+. matrix A2 = (1,0 \ .,1)
+
+. matrix B2 = (.,0,0 \ 0,.)
+conformability error
+r(503);
+
+. matrix B2 = (.,0 \ 0,.)
+
+.  svar growth_adj unrate_adj, lags(1/8) aeq(A2) beq(B2)
+Estimating short-run parameters
+
+Iteration 0:   log likelihood = -2135.1359  
+Iteration 1:   log likelihood = -1573.5625  
+Iteration 2:   log likelihood = -963.07698  
+Iteration 3:   log likelihood = -851.08548  
+Iteration 4:   log likelihood = -701.33231  
+Iteration 5:   log likelihood = -560.70387  
+Iteration 6:   log likelihood =  -442.4749  
+Iteration 7:   log likelihood =  -400.3643  
+Iteration 8:   log likelihood = -397.91796  
+Iteration 9:   log likelihood = -397.87703  
+Iteration 10:  log likelihood = -397.87703  
+
+Structural vector autoregression
+
+ ( 1)  [/A]1_1 = 1
+ ( 2)  [/A]1_2 = 0
+ ( 3)  [/A]2_2 = 1
+ ( 4)  [/B]1_2 = 0
+ ( 5)  [/B]2_1 = 0
+
+Sample:  17 - 160                               Number of obs     =        144
+Exactly identified model                        Log likelihood    =   -397.877
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+/A           |
+         1_1 |          1  (constrained)
+         2_1 |   .0524123   .0051483    10.18   0.000     .0423217    .0625029
+         1_2 |          0  (constrained)
+         2_2 |          1  (constrained)
+-------------+----------------------------------------------------------------
+/B           |
+         1_1 |   3.875465    .228364    16.97   0.000      3.42788     4.32305
+         2_1 |          0  (constrained)
+         1_2 |          0  (constrained)
+         2_2 |   .2394267   .0141084    16.97   0.000     .2117749    .2670786
+------------------------------------------------------------------------------
+
+. irf create var2irf, step(24) set(var2,replace)
+(file var2.irf created)
+(file var2.irf now active)
+(file var2.irf updated)
+
+. irf graph sirf, irf(var2irf) yline(0,lcolor(black))
+
+. irf create svar1, set(myGraph1, replace)
+(file myGraph1.irf created)
+(file myGraph1.irf now active)
+(file myGraph1.irf updated)
+
+. 
+. irf cgraph (svar1 growth_adj growth_adj sirf) (svar1 growth_adj unrate_adj sirf) (svar1 unrate_a
+> dj growth_adj sirf) (svar1 unrate_adj unrate_adj sirf), title ("Irfs of VAR Model 2", size(vsmal
+> l))
+
+. graph save "Graph" "G:\Github\TimeSeries\Graphs\GraphSR.gph"
+(file G:\Github\TimeSeries\Graphs\GraphSR.gph saved)
+
+. matrix C = (.,0 \ .,.)
+
+. svar growth_adj unrate_adj, lags(1/8) leq(C)
+option leq() not allowed
+r(198);
+
+. svar growth_adj unrate_adj, lags(1/8) lreq(C)
+Estimating long-run parameters
+
+Iteration 0:   log likelihood = -12761.773  
+Iteration 1:   log likelihood = -888.32208  
+Iteration 2:   log likelihood = -564.44957  
+Iteration 3:   log likelihood = -408.87159  
+Iteration 4:   log likelihood = -397.88416  
+Iteration 5:   log likelihood = -397.87703  
+Iteration 6:   log likelihood = -397.87703  
+
+Structural vector autoregression
+
+ ( 1)  [/C]1_2 = 0
+
+Sample:  17 - 160                               Number of obs     =        144
+Exactly identified model                        Log likelihood    =   -397.877
+
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+/C           |
+         1_1 |   7.791443   .4591152    16.97   0.000     6.891593    8.691292
+         2_1 |   -3.09921   .3213763    -9.64   0.000    -3.729096   -2.469325
+         1_2 |          0  (constrained)
+         2_2 |   3.173351   .1869915    16.97   0.000     2.806854    3.539848
+------------------------------------------------------------------------------
+
+. irf create lr, set(lrirf1) step(40) replace
+(file lrirf1.irf created)
+(file lrirf1.irf now active)
+irfname lr not found in lrirf1.irf
+(file lrirf1.irf updated)
+
+. irf graph sirf, yline(0,lcolor(black)) xlabel(0(4)40) byopts(yrescale) set(lrirf1)
+(file lrirf1.irf now active)
+standard errors from all selected results are missing, cannot compute confidence intervals for
+    the chosen statistics
+
+. graph export "G:\Github\TimeSeries\Graphs\GraphLRNON.png", as(png) name("Graph")
+(file G:\Github\TimeSeries\Graphs\GraphLRNON.png written in PNG format)
+
+. use lrirf1.irf, clear
+
+. sort irfname impulse response step
+
+. gen csirf = sirf
+
+. by irfname impulse: replace csirf = sum(sirf) if response== "growth_adj"
+(80 real changes made)
+
+. order irfname impulse response step sirf csirf
+
+. save lrirf3.irf, replace
+(note: file lrirf3.irf not found)
+file lrirf3.irf saved
+
+. irf set lrirf3.irf
+(file lrirf3.irf now active)
+
+. irf graph csirf, yline(0,lcolor(black)) noci xlabel(0(4)40) byopts(yrescale)
+
+. graph export "G:\Github\TimeSeries\Graphs\GraphLRCUM.png", as(png) name("Graph")
+(file G:\Github\TimeSeries\Graphs\GraphLRCUM.png written in PNG format)
+
+. by irfname impulse: replace csirf = sum(sirf) if response != "growth_adj"
+(80 real changes made)
+
+. save lrirf3.irf, replace
+file lrirf3.irf saved
+
+. 
+. irf set lrirf3.irf
+(file lrirf3.irf now active)
+
+. irf graph csirf, yline(0,lcolor(black)) noci xlabel(0(4)40) byopts(yrescale)
+
+. matrix A2 = (1,. \ 0,1)
+
+. matrix B2 = (.,0 \ 0,.)
+
+. svar growth_adj unrate_adj, lags(1/8) aeq(A2) beq(B2)
+variable growth_adj not found
+r(111);
+
+. exit, clear
