@@ -21,7 +21,7 @@ library(tinytex)
 
 ```{r, results='hide'}
 
-irates <- read_dta("C:/Users/gaeta/Documents/Github/TimeSeries/Data/irates.dta")
+irates <- read_dta("G:/Github/TimeSeries/Data/irates.dta")
 attach(irates)
 ts(r1)
 ts(r3)
@@ -162,14 +162,14 @@ Since we know that $\Omega$ is not a diagonal matrix, it cannot be the case that
   
   C. If we were to suppose that $B^{-1}$ was a "lower triangular" matrix, meanig that the upper right corner of matrix is full of zeroes, then we could identify $B$ and $D$ from the Cholesky decomposition. The Cholesky decomposition states that for any positive symmetric matrix, i.e. $\Omega$ there exists a unique decomposed triangular factorization such that:
   \begin{align}
-  \Omage= T\Delta T'
+  \Omega= T\Delta T'
   \end{align}
  
- Where $\Detla$ is a diagonal matrix and $T$ is a lower triangular matrix with 1s on the diagonal. Remember the Cholesky decomposition is unique. We use it in our example because it solves the identification problem. As we can see from the forecast error we have a never ending cycle of structural shocks affecting the forecast errors. This means that it makes it impossible to identify the $\epsilon s$ from the forecast errors $e s$, which is what we want to identify. We know that this decomposition gives us the parameters that we want to get by this simple proof. 
- Let us assume that $T=B^{-1}$ and that $\Delta=D$ so that $\Omega = B^{-1}DB^{-1}'$. Since we assume that $B^{-1}$ is a lower triangular matrix, it must be the case that:
+ Where $\Delta$ is a diagonal matrix and $T$ is a lower triangular matrix with 1s on the diagonal. Remember the Cholesky decomposition is unique. We use it in our example because it solves the identification problem. As we can see from the forecast error we have a never ending cycle of structural shocks affecting the forecast errors. This means that it makes it impossible to identify the $\epsilon s$ from the forecast errors $e s$, which is what we want to identify. We know that this decomposition gives us the parameters that we want to get by this simple proof. 
+ Let us assume that $T=B^{-1}$ and that $\Delta=D$ so that $\Omega = B^{-1}D(B^{-1})'$. Since we assume that $B^{-1}$ is a lower triangular matrix, it must be the case that:
  \begin{align}
-  B^{-1} &= begin{bmatrix} 1 & \beta_{12} \\ \beta_{12} & 1 \end{bmatrix} \\
-  &= begin{bmatrix} 1 & 0 \\ \beta_{12} & 1 \end{bmatrix} 
+  B^{-1} &= \begin{bmatrix} 1 & \beta_{12} \\ \beta_{12} & 1 \end{bmatrix} \\
+  &= \begin{bmatrix} 1 & 0 \\ \beta_{12} & 1 \end{bmatrix} 
   \end{align}
  where $\beta_{12}=0$ so that we do indeed get a lower diagonal matrix. 
  
@@ -231,12 +231,7 @@ Where $a=c=f=1$
   
   C.The effects that are contemporaneously zero as an effect of the short run restrictions are the graphs d,g,h (respectively, row-column, middle-left, bottom-left, bottom-middle). The reason I say this is because we need to look at the labels of the graph and compare them to the order of our equation. We know from our assumptions that the aggregate demand shock and the oil specific demand shock should not affect oil production within the month. Hence the graphs d and g represent this assumption. Furthermore, we know the the oil-specific demand shock does not affect the real activity contemporaneously. Graph h represents the effect of oil-specific demand on the real economic activity. 
   
-  D. Three main findings:
-  
-  1) production disruptions cause small and transitory increase in real price, lasting for a year;
-  2) increases in aggregate demand for industrial commodities causes delayed but large and sustained increase in real price of oil;
-  3) increases in precautionary demand for crude oil causes immediate,persistent, and large increase in real pric
-  
+  D. According to the graphs, oil supply shocks do no affect real economic activity or the real price of oil, but there is a negative effect on oil production that is significant and persistent. The aggreagate demand shocks does not affect oil production at all, but significantly affects real economic activity and the real price of oil positively in a persistent manner. The oil-specific demand shocks do not affect oil production, they affect real economic activity in the long run but it is not persistent and they affect the real price of oil and it seems to affect it persistently. 
   
   
   
