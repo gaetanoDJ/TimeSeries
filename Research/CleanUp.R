@@ -4,6 +4,11 @@ library(timeSeries)
 library(stats)
 library(dplyr)
 library(tseries)
+library(xts)
+library(zoo)
+library(timetk)
+library(xlsx)
+library(foreign)
 
 GoldSupply <- read_excel("GitHub/TimeSeries/Research/GoldSupply.xlsx",range = "A1:B45")
 
@@ -88,7 +93,7 @@ plot.ts(ADJGDSum)
 plot.ts(ADJSP500)
 plot.ts(ADJGPrice)
 
-# Everything seems good.Exporting the clean datasets to a new data so that I can perform my analysis. 
+# Everything seems good.Exporting the clean datasets to a new data so that I can replicate this in case anything goes wrong. 
 
 #### Warning: You will have to adjust the directory in order to save this data ####
 write.csv2(ADJGoldSupply, file = "C:/Users/gaeta/Documents/GitHub/TimeSeries/Research/AdjustedGoldSupply.csv")
@@ -96,3 +101,11 @@ write.csv2(ADJGDAverage, file = "C:/Users/gaeta/Documents/GitHub/TimeSeries/Rese
 write.csv2(ADJGDSum, file = "C:/Users/gaeta/Documents/GitHub/TimeSeries/Research/AdjustedGoldDemandSum.csv")
 write.csv2(ADJSP500, file = "C:/Users/gaeta/Documents/GitHub/TimeSeries/Research/AdjustedS&P500.csv")
 write.csv2(ADJGPrice, file = "C:/Users/gaeta/Documents/GitHub/TimeSeries/Research/AdjustedGoldPrice.csv")
+
+
+# Merging all TS into one
+Merged <- merge.zoo(ADJGoldSupply,ADJGDAverage, ADJGDSum, ADJSP500,ADJGPrice)
+MergedTest <- as.xts(Merged)
+MergedTest <- data.frame(MergedTest)
+write.dta(MergedTest,  file = "C:/Users/gaeta/Documents/GitHub/TimeSeries/Research/MergedTest.dta")
+write.csv2(MergedTest, file = "C:/Users/gaeta/Documents/GitHub/TimeSeries/Research/MergedTest.csv")
