@@ -1,0 +1,278 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\gaeta\Documents\GitHub\TimeSeries\Research\Letsgo.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}15 Apr 2021, 14:42:23
+
+{com}. use "C:\Users\gaeta\Documents\GitHub\TimeSeries\Research\MergedTest.dta" 
+{txt}(Written by R.              )
+
+{com}. 
+. generate date =tq(2011q3) +_n-1
+
+. 
+. format %tq date
+
+. 
+. list date in 1/5
+{txt}
+     {c TLC}{hline 8}{c TRC}
+     {c |} {res}  date {txt}{c |}
+     {c LT}{hline 8}{c RT}
+  1. {c |} {res}2011q3 {txt}{c |}
+  2. {c |} {res}2011q4 {txt}{c |}
+  3. {c |} {res}2012q1 {txt}{c |}
+  4. {c |} {res}2012q2 {txt}{c |}
+  5. {c |} {res}2012q3 {txt}{c |}
+     {c BLC}{hline 8}{c BRC}
+
+{com}. 
+. tsset date
+{res}{txt}{col 9}time variable:  {res}{col 25}date, 2011q3 to 2020q4
+{txt}{col 17}delta:  {res}1 quarter
+
+{com}. 
+. matrix C = (.,0,0,0 \ .,.,0,0 \ .,.,.,0 \ .,.,.,.)
+
+. 
+. matrix A = (1,0,0,0 \ .,1,0,0 \ .,.,1,0 \ .,.,.,1)
+
+. 
+. matrix B = (.,0,0,0 \ 0,.,0,0 \ 0,0,.,0 \ 0,0,0,.)
+
+. svar ADJGoldSupply ADJGDAverage ADJSP500 ADJGPrice , lags(1/8) aeq(A) beq(B)
+{res}{txt}Estimating short-run parameters
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-118.25469}  
+Iteration 1:{space 3}log likelihood = {res: 170.09454}  
+Iteration 2:{space 3}log likelihood = {res: 458.44376}  
+Iteration 3:{space 3}log likelihood = {res: 746.79299}  
+Iteration 4:{space 3}log likelihood = {res: 1035.1422}  
+Iteration 5:{space 3}log likelihood = {res: 1323.4914}  
+Iteration 6:{space 3}log likelihood = {res: 1611.8407}  
+Iteration 7:{space 3}log likelihood = {res: 1900.1899}  
+Iteration 8:{space 3}log likelihood = {res:  2188.539}  
+Iteration 9:{space 3}log likelihood = {res: 2476.8569}  
+Iteration 10:{space 2}log likelihood = {res: 2757.3656}  
+Iteration 11:{space 2}log likelihood = {res: 2826.6157}  
+Iteration 12:{space 2}log likelihood = {res: 2859.9678}  
+Iteration 13:{space 2}log likelihood = {res: 2902.2306}  
+Iteration 14:{space 2}log likelihood = {res: 2929.4228}  
+Iteration 15:{space 2}log likelihood = {res: 2958.2526}  
+Iteration 16:{space 2}log likelihood = {res: 2973.8818}  
+Iteration 17:{space 2}log likelihood = {res: 2977.8181}  
+Iteration 18:{space 2}log likelihood = {res: 2978.0724}  
+Iteration 19:{space 2}log likelihood = {res: 2978.0735}  
+Iteration 20:{space 2}log likelihood = {res: 2978.0735}  
+{res}
+{txt}Structural vector autoregression
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}[/A]1_1 = 1{p_end}
+{p 0 7}{space 1}{text:( 2)}{space 1} [/A]1_2 = 0{p_end}
+{p 0 7}{space 1}{text:( 3)}{space 1} [/A]1_3 = 0{p_end}
+{p 0 7}{space 1}{text:( 4)}{space 1} [/A]1_4 = 0{p_end}
+{p 0 7}{space 1}{text:( 5)}{space 1} [/A]2_2 = 1{p_end}
+{p 0 7}{space 1}{text:( 6)}{space 1} [/A]2_3 = 0{p_end}
+{p 0 7}{space 1}{text:( 7)}{space 1} [/A]2_4 = 0{p_end}
+{p 0 7}{space 1}{text:( 8)}{space 1} [/A]3_3 = 1{p_end}
+{p 0 7}{space 1}{text:( 9)}{space 1} [/A]3_4 = 0{p_end}
+{p 0 7}{space 1}{text:(10)}{space 1} [/A]4_4 = 1{p_end}
+{p 0 7}{space 1}{text:(11)}{space 1} [/B]1_2 = 0{p_end}
+{p 0 7}{space 1}{text:(12)}{space 1} [/B]1_3 = 0{p_end}
+{p 0 7}{space 1}{text:(13)}{space 1} [/B]1_4 = 0{p_end}
+{p 0 7}{space 1}{text:(14)}{space 1} [/B]2_1 = 0{p_end}
+{p 0 7}{space 1}{text:(15)}{space 1} [/B]2_3 = 0{p_end}
+{p 0 7}{space 1}{text:(16)}{space 1} [/B]2_4 = 0{p_end}
+{p 0 7}{space 1}{text:(17)}{space 1} [/B]3_1 = 0{p_end}
+{p 0 7}{space 1}{text:(18)}{space 1} [/B]3_2 = 0{p_end}
+{p 0 7}{space 1}{text:(19)}{space 1} [/B]3_4 = 0{p_end}
+{p 0 7}{space 1}{text:(20)}{space 1} [/B]4_1 = 0{p_end}
+{p 0 7}{space 1}{text:(21)}{space 1} [/B]4_2 = 0{p_end}
+{p 0 7}{space 1}{text:(22)}{space 1} [/B]4_3 = 0{p_end}
+
+{col 1}{txt}Sample:  {res}2014q1 - 2020q2 {txt}{col 49}Number of obs{col 67}= {res}        26
+{txt}Overidentified model{col 49}Log likelihood{col 67}=  {res} 2978.074
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}/A           {txt}{c |}
+{space 9}1_1 {c |}{col 14}{res}{space 2}        1{col 26}{txt}  (constrained)
+{space 9}2_1 {c |}{col 14}{res}{space 2}-.0286482{col 26}{space 2}  .014025{col 37}{space 1}   -2.04{col 46}{space 3}0.041{col 54}{space 4}-.0561367{col 67}{space 3}-.0011598
+{txt}{space 9}3_1 {c |}{col 14}{res}{space 2} .5104035{col 26}{space 2} .0171958{col 37}{space 1}   29.68{col 46}{space 3}0.000{col 54}{space 4} .4767003{col 67}{space 3} .5441066
+{txt}{space 9}4_1 {c |}{col 14}{res}{space 2}-1.309097{col 26}{space 2} .7858362{col 37}{space 1}   -1.67{col 46}{space 3}0.096{col 54}{space 4}-2.849308{col 67}{space 3} .2311136
+{txt}{space 9}1_2 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_2 {c |}{col 14}{res}{space 2}        1{col 26}{txt}  (constrained)
+{space 9}3_2 {c |}{col 14}{res}{space 2}-2.402029{col 26}{space 2}  .223211{col 37}{space 1}  -10.76{col 46}{space 3}0.000{col 54}{space 4}-2.839515{col 67}{space 3}-1.964544
+{txt}{space 9}4_2 {c |}{col 14}{res}{space 2}-8.149788{col 26}{space 2} 4.033327{col 37}{space 1}   -2.02{col 46}{space 3}0.043{col 54}{space 4}-16.05496{col 67}{space 3}-.2446123
+{txt}{space 9}1_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_3 {c |}{col 14}{res}{space 2}        1{col 26}{txt}  (constrained)
+{space 9}4_3 {c |}{col 14}{res}{space 2}-4.093695{col 26}{space 2}  1.51741{col 37}{space 1}   -2.70{col 46}{space 3}0.007{col 54}{space 4}-7.067763{col 67}{space 3}-1.119627
+{txt}{space 9}1_4 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_4 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_4 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}4_4 {c |}{col 14}{res}{space 2}        1{col 26}{txt}  (constrained)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}/B           {txt}{c |}
+{space 9}1_1 {c |}{col 14}{res}{space 2} 3.60e-13{col 26}{space 2} 5.00e-14{col 37}{space 1}    7.21{col 46}{space 3}0.000{col 54}{space 4} 2.62e-13{col 67}{space 3} 4.58e-13
+{txt}{space 9}2_1 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_1 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}4_1 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}1_2 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_2 {c |}{col 14}{res}{space 2} 2.58e-14{col 26}{space 2} 3.57e-15{col 37}{space 1}    7.21{col 46}{space 3}0.000{col 54}{space 4} 1.88e-14{col 67}{space 3} 3.28e-14
+{txt}{space 9}3_2 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}4_2 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}1_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_3 {c |}{col 14}{res}{space 2} 2.93e-14{col 26}{space 2} 4.07e-15{col 37}{space 1}    7.21{col 46}{space 3}0.000{col 54}{space 4} 2.14e-14{col 67}{space 3} 3.73e-14
+{txt}{space 9}4_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}1_4 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_4 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_4 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}4_4 {c |}{col 14}{res}{space 2} 2.27e-13{col 26}{space 2} 3.15e-14{col 37}{space 1}    7.21{col 46}{space 3}0.000{col 54}{space 4} 1.65e-13{col 67}{space 3} 2.89e-13
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+LR test of identifying restrictions: chi2({res}4{txt}) = {res}0{txt}{col 60}Prob > chi2{col 72}={res} 1.000
+
+{com}. irf create lr, set(lrirf1) step(40) replace
+{txt}(file lrirf1.irf created)
+(file lrirf1.irf now active)
+irfname lr not found in lrirf1.irf
+{err}{hline 2}Break{hline 2}
+{txt}{search r(1), local:r(1);}
+
+{com}. irf create var2irf, step(24) set(var2,replace)
+{txt}(file var2.irf created)
+(file var2.irf now active)
+(file var2.irf updated)
+
+{com}. irf graph sirf, irf(var2irf) yline(0,lcolor(black))
+{res}
+{com}. graph export "C:\Users\gaeta\Documents\GitHub\TimeSeries\Research\GraphLOL.png", as(png) name("Graph")
+{txt}(file C:\Users\gaeta\Documents\GitHub\TimeSeries\Research\GraphLOL.png written in PNG format)
+
+{com}. svar ADJGoldSupply ADJGDAverage ADJSP500 ADJGPrice , lags(1/8) aeq(A) beq(B)
+{res}{txt}Estimating short-run parameters
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-118.25469}  
+Iteration 1:{space 3}log likelihood = {res: 170.09454}  
+Iteration 2:{space 3}log likelihood = {res: 458.44376}  
+Iteration 3:{space 3}log likelihood = {res: 746.79299}  
+Iteration 4:{space 3}log likelihood = {res: 1035.1422}  
+Iteration 5:{space 3}log likelihood = {res: 1323.4914}  
+Iteration 6:{space 3}log likelihood = {res: 1611.8407}  
+Iteration 7:{space 3}log likelihood = {res: 1900.1899}  
+Iteration 8:{space 3}log likelihood = {res:  2188.539}  
+Iteration 9:{space 3}log likelihood = {res: 2476.8569}  
+Iteration 10:{space 2}log likelihood = {res: 2757.3656}  
+Iteration 11:{space 2}log likelihood = {res: 2826.6157}  
+Iteration 12:{space 2}log likelihood = {res: 2859.9678}  
+Iteration 13:{space 2}log likelihood = {res: 2902.2306}  
+Iteration 14:{space 2}log likelihood = {res: 2929.4228}  
+Iteration 15:{space 2}log likelihood = {res: 2958.2526}  
+Iteration 16:{space 2}log likelihood = {res: 2973.8818}  
+Iteration 17:{space 2}log likelihood = {res: 2977.8181}  
+Iteration 18:{space 2}log likelihood = {res: 2978.0724}  
+Iteration 19:{space 2}log likelihood = {res: 2978.0735}  
+Iteration 20:{space 2}log likelihood = {res: 2978.0735}  
+{res}
+{txt}Structural vector autoregression
+
+{p 0 7}{space 1}{text:( 1)}{space 1} {res}[/A]1_1 = 1{p_end}
+{p 0 7}{space 1}{text:( 2)}{space 1} [/A]1_2 = 0{p_end}
+{p 0 7}{space 1}{text:( 3)}{space 1} [/A]1_3 = 0{p_end}
+{p 0 7}{space 1}{text:( 4)}{space 1} [/A]1_4 = 0{p_end}
+{p 0 7}{space 1}{text:( 5)}{space 1} [/A]2_2 = 1{p_end}
+{p 0 7}{space 1}{text:( 6)}{space 1} [/A]2_3 = 0{p_end}
+{p 0 7}{space 1}{text:( 7)}{space 1} [/A]2_4 = 0{p_end}
+{p 0 7}{space 1}{text:( 8)}{space 1} [/A]3_3 = 1{p_end}
+{p 0 7}{space 1}{text:( 9)}{space 1} [/A]3_4 = 0{p_end}
+{p 0 7}{space 1}{text:(10)}{space 1} [/A]4_4 = 1{p_end}
+{p 0 7}{space 1}{text:(11)}{space 1} [/B]1_2 = 0{p_end}
+{p 0 7}{space 1}{text:(12)}{space 1} [/B]1_3 = 0{p_end}
+{p 0 7}{space 1}{text:(13)}{space 1} [/B]1_4 = 0{p_end}
+{p 0 7}{space 1}{text:(14)}{space 1} [/B]2_1 = 0{p_end}
+{p 0 7}{space 1}{text:(15)}{space 1} [/B]2_3 = 0{p_end}
+{p 0 7}{space 1}{text:(16)}{space 1} [/B]2_4 = 0{p_end}
+{p 0 7}{space 1}{text:(17)}{space 1} [/B]3_1 = 0{p_end}
+{p 0 7}{space 1}{text:(18)}{space 1} [/B]3_2 = 0{p_end}
+{p 0 7}{space 1}{text:(19)}{space 1} [/B]3_4 = 0{p_end}
+{p 0 7}{space 1}{text:(20)}{space 1} [/B]4_1 = 0{p_end}
+{p 0 7}{space 1}{text:(21)}{space 1} [/B]4_2 = 0{p_end}
+{p 0 7}{space 1}{text:(22)}{space 1} [/B]4_3 = 0{p_end}
+
+{col 1}{txt}Sample:  {res}2014q1 - 2020q2 {txt}{col 49}Number of obs{col 67}= {res}        26
+{txt}Overidentified model{col 49}Log likelihood{col 67}=  {res} 2978.074
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}/A           {txt}{c |}
+{space 9}1_1 {c |}{col 14}{res}{space 2}        1{col 26}{txt}  (constrained)
+{space 9}2_1 {c |}{col 14}{res}{space 2}-.0286482{col 26}{space 2}  .014025{col 37}{space 1}   -2.04{col 46}{space 3}0.041{col 54}{space 4}-.0561367{col 67}{space 3}-.0011598
+{txt}{space 9}3_1 {c |}{col 14}{res}{space 2} .5104035{col 26}{space 2} .0171958{col 37}{space 1}   29.68{col 46}{space 3}0.000{col 54}{space 4} .4767003{col 67}{space 3} .5441066
+{txt}{space 9}4_1 {c |}{col 14}{res}{space 2}-1.309097{col 26}{space 2} .7858362{col 37}{space 1}   -1.67{col 46}{space 3}0.096{col 54}{space 4}-2.849308{col 67}{space 3} .2311136
+{txt}{space 9}1_2 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_2 {c |}{col 14}{res}{space 2}        1{col 26}{txt}  (constrained)
+{space 9}3_2 {c |}{col 14}{res}{space 2}-2.402029{col 26}{space 2}  .223211{col 37}{space 1}  -10.76{col 46}{space 3}0.000{col 54}{space 4}-2.839515{col 67}{space 3}-1.964544
+{txt}{space 9}4_2 {c |}{col 14}{res}{space 2}-8.149788{col 26}{space 2} 4.033327{col 37}{space 1}   -2.02{col 46}{space 3}0.043{col 54}{space 4}-16.05496{col 67}{space 3}-.2446123
+{txt}{space 9}1_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_3 {c |}{col 14}{res}{space 2}        1{col 26}{txt}  (constrained)
+{space 9}4_3 {c |}{col 14}{res}{space 2}-4.093695{col 26}{space 2}  1.51741{col 37}{space 1}   -2.70{col 46}{space 3}0.007{col 54}{space 4}-7.067763{col 67}{space 3}-1.119627
+{txt}{space 9}1_4 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_4 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_4 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}4_4 {c |}{col 14}{res}{space 2}        1{col 26}{txt}  (constrained)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}/B           {txt}{c |}
+{space 9}1_1 {c |}{col 14}{res}{space 2} 3.60e-13{col 26}{space 2} 5.00e-14{col 37}{space 1}    7.21{col 46}{space 3}0.000{col 54}{space 4} 2.62e-13{col 67}{space 3} 4.58e-13
+{txt}{space 9}2_1 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_1 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}4_1 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}1_2 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_2 {c |}{col 14}{res}{space 2} 2.58e-14{col 26}{space 2} 3.57e-15{col 37}{space 1}    7.21{col 46}{space 3}0.000{col 54}{space 4} 1.88e-14{col 67}{space 3} 3.28e-14
+{txt}{space 9}3_2 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}4_2 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}1_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_3 {c |}{col 14}{res}{space 2} 2.93e-14{col 26}{space 2} 4.07e-15{col 37}{space 1}    7.21{col 46}{space 3}0.000{col 54}{space 4} 2.14e-14{col 67}{space 3} 3.73e-14
+{txt}{space 9}4_3 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}1_4 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}2_4 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}3_4 {c |}{col 14}{res}{space 2}        0{col 26}{txt}  (constrained)
+{space 9}4_4 {c |}{col 14}{res}{space 2} 2.27e-13{col 26}{space 2} 3.15e-14{col 37}{space 1}    7.21{col 46}{space 3}0.000{col 54}{space 4} 1.65e-13{col 67}{space 3} 2.89e-13
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+LR test of identifying restrictions: chi2({res}4{txt}) = {res}0{txt}{col 60}Prob > chi2{col 72}={res} 1.000
+
+{com}. irf create svar1, set(myGraph1, replace)
+{txt}(file myGraph1.irf created)
+(file myGraph1.irf now active)
+(file myGraph1.irf updated)
+
+{com}. irf cgraph (svar1 ADJGoldSupply ADJGoldSupply sirf) (svar1 ADJGoldSupply ADJGDAverage sirf) (svar1 ADJGoldSupply ADJSP500 sirf) (svar1 ADJGoldSupply ADJGPrice sirf) 
+{res}
+{com}. 
+.            (svar1 ADJGDAverage ADJGoldSupply sirf) (svar1 ADJGDAverage ADJGDAverage sirf) (svar1 ADJGDAverage ADJSP500 sirf) (svar1 ADJGDAverage ADJGPrice sirf)(svar1 ADJSP500 ADJGoldSupply sirf) (svar1 ADJSP500 ADJGDAverage sirf) (svar1 ADJSP500 ADJSP500 sirf) (svar1 ADJSP500 ADJGPrice sirf),
+{bf}{err}({sf} is not a valid command name
+{txt}{search r(199), local:r(199);}
+
+{com}. 
+.    title ("Irfs of VAR Model 2", size(vsmall))
+{err}command {bf}title{sf} is unrecognized
+{txt}{search r(199), local:r(199);}
+
+{com}. irf cgraph (svar1 ADJGoldSupply ADJGoldSupply sirf) (svar1 ADJGoldSupply ADJGDAverage sirf) (svar1 ADJGoldSupply ADJSP500 sirf) (svar1 ADJGoldSupply ADJGPrice sirf)(svar1 ADJGDAverage ADJGoldSupply sirf) (svar1 ADJGDAverage ADJGDAverage sirf) (svar1 ADJGDAverage ADJSP500 sirf) (svar1 ADJGDAverage ADJGPrice sirf)(svar1 ADJSP500 ADJGoldSupply sirf) (svar1 ADJSP500 ADJGDAverage sirf) (svar1 ADJSP500 ADJSP500 sirf) (svar1 ADJSP500 ADJGPrice sirf)(svar1 ADJGPrice ADJGoldSupply sirf) (svar1 ADJGPrice ADJGDAverage sirf) (svar1 ADJGPrice ADJSP500 sirf) (svar1 ADJGPrice ADJGPrice sirf),title ("Irfs of VAR Model 2", size(vsmall))
+{res}
+{com}. graph export "C:\Users\gaeta\Documents\GitHub\TimeSeries\Research\Thisisbetter.png", as(png) name("Graph")
+{txt}(file C:\Users\gaeta\Documents\GitHub\TimeSeries\Research\Thisisbetter.png written in PNG format)
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\gaeta\Documents\GitHub\TimeSeries\Research\Letsgo.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}15 Apr 2021, 15:04:15
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
